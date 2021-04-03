@@ -1,3 +1,5 @@
+create ./maFiles directory and put them there
+
 1. If you are worried about security of your date, you can read code its written
 on very popular javascript, and become sure that your maFiles not leaving your pc anywhere.
 

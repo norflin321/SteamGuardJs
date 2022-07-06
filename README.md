@@ -1,2 +1,1 @@
-* create ./maFiles directory and put them there
-* it only needs {"shared_secret":"***"} to generate 2FA code
+put mafile in ./maFiles directory (it only needs {"shared_secret":"***"} to generate 2FA code)

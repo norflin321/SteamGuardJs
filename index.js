@@ -1,8 +1,8 @@
-const rp = require('request-promise-native');
-const crypto = require('crypto');
-const fs = require('fs');
+const rp = require("request-promise-native");
+const crypto = require("crypto");
+const fs = require("fs");
 
-const symbols = [ '2', '3', '4', '5', '6', '7', '8', '9', 'B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'M', 'N', 'P', 'Q', 'R', 'T', 'V', 'W', 'X', 'Y'];
+const symbols = [ "2", "3", "4", "5", "6", "7", "8", "9", "B", "C", "D", "F", "G", "H", "J", "K", "M", "N", "P", "Q", "R", "T", "V", "W", "X", "Y", ];
 
 const getCode = (sharedSecret, timeOffset) => {
   const time = new Date().getTime() - timeOffset;
@@ -21,37 +21,39 @@ const getCode = (sharedSecret, timeOffset) => {
     value = Math.floor(value / symbols.length);
   }
   return code;
-}
+};
 
 (async () => {
   // get time offset to steam server
   let timeOffset;
   try {
-    const {response} = await rp({
-      uri: 'https://api.steampowered.com/ITwoFactorService/QueryTime/v0001',
-      method: 'POST',
-      json: true
-    }) 
+    const { response } = await rp({
+      uri: "https://api.steampowered.com/ITwoFactorService/QueryTime/v0001",
+      method: "POST",
+      json: true,
+    });
     if (!response || !response.server_time) throw new Error();
-    timeOffset = new Date().getTime() - (parseInt(response.server_time) * 1000);
+    timeOffset = new Date().getTime() - parseInt(response.server_time) * 1000;
   } catch (err) {
-    console.error('Steam Network ERROR:', err);
+    console.error("Steam Network ERROR:", err);
     return;
   }
 
   // generate 2FA codes
   try {
-    const maFiles = fs.readdirSync('./maFiles');
+    const maFiles = fs.readdirSync("./maFiles");
     if (maFiles.length === 0) {
-      console.log('Put your maFiles in maFiles directory, you dumbass))');
+      console.log("Put your maFiles in maFiles directory, you dumbass))");
       return;
     }
     for (const fileName of maFiles) {
-      const {shared_secret} = JSON.parse(fs.readFileSync('./maFiles/' + fileName));
+      const { shared_secret } = JSON.parse(
+        fs.readFileSync("./maFiles/" + fileName)
+      );
       console.log(`${fileName}: ${getCode(shared_secret, timeOffset)}`);
     }
   } catch (err) {
-    console.error('Generate 2FA Codes ERROR:', err);
+    console.error("Generate 2FA Codes ERROR:", err);
     return;
   }
 })();

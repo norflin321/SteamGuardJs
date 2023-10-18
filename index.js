@@ -47,10 +47,8 @@ const getCode = (sharedSecret, timeOffset) => {
       return;
     }
     for (const fileName of maFiles) {
-      const { shared_secret } = JSON.parse(
-        fs.readFileSync("./maFiles/" + fileName)
-      );
-      console.log(`${fileName}: ${getCode(shared_secret, timeOffset)}`);
+      const { shared_secret, account_name } = JSON.parse(fs.readFileSync("./maFiles/" + fileName));
+      console.log(`${account_name}: ${getCode(shared_secret, timeOffset)}`);
     }
   } catch (err) {
     console.error("Generate 2FA Codes ERROR:", err);
